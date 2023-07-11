@@ -173,27 +173,24 @@ void Player::Update(float dt)
 
 	SetPosition(position);
 
+
 	std::string currentClipId = animation.GetCurrentClipId();	
 	// 에니메이션
-
-	
-
-	if (currentClipId.compare(0, 4, "Idle", 4) == 0)
 	{
-		if (h != 0.f)
+		if (h != 0.f && currentClipId != "MoveLR")
 		{
 			animation.Play("MoveLR");
 		}
-		else if (v > 0.f)
+		else if (v > 0.f && h == 0.f && currentClipId != "MoveDown")
 		{
 			animation.Play("MoveDown");
 		}
-		else if (v < 0.f)
+		else if (v < 0.f && h == 0.f && currentClipId != "MoveUp")
 		{
 			animation.Play("MoveUp");
 		}
 	}
-	else if (currentClipId.compare(0, 4, "Move", 4) == 0)
+	if (currentClipId.compare(0, 4, "Move", 4) == 0)
 	{
 		char ch = currentClipId[currentClipId.find_first_not_of("Move")];
 		if (h == 0.f && v == 0.f)
