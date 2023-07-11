@@ -6,71 +6,129 @@
 
 void Player::Init()
 {
-	std::string textureId = "graphics/sprite_sheet.png";
+	std::string textureId = "graphics/RubySheet.png";
 
 	// Idle
 	{
 		AnimationClip clip;
-		clip.id = "Idle";
+		clip.id = "IdleLR";
 		clip.fps = 10;
 		clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(0, 0, 120, 120);
-		for (int i = 0; i < 8; ++i)
+		sf::IntRect coord(0, 768, 256, 256);
+		for (int i = 0; i < 2; ++i)
 		{
 			clip.frames.push_back({ textureId, coord });
-			coord.left += coord.width;
+			coord.top += coord.height;
 		}
+		animation.AddClip(clip);
+	}
 
+	{
+		AnimationClip clip;
+		clip.id = "IdleDown";
+		clip.fps = 10;
+		clip.loopType = AnimationLoopTypes::Loop;
+
+		sf::IntRect coord(256, 768, 256, 256);
+		for (int i = 0; i < 2; ++i)
+		{
+			clip.frames.push_back({ textureId, coord });
+			coord.top += coord.height;
+		}
+		animation.AddClip(clip);
+	}
+
+	{
+		AnimationClip clip;
+		clip.id = "IdleUp";
+		clip.fps = 10;
+		clip.loopType = AnimationLoopTypes::Loop;
+
+		sf::IntRect coord(512, 768, 256, 256);
+		for (int i = 0; i < 2; ++i)
+		{
+			clip.frames.push_back({ textureId, coord });
+			coord.top += coord.height;
+		}
 		animation.AddClip(clip);
 	}
 
 	// Move
 	{
 		AnimationClip clip;
-		clip.id = "Move";
+		clip.id = "MoveLR";
 		clip.fps = 10;
 		clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(0, 120, 120, 120);
-		for (int i = 0; i < 8; ++i)
+		sf::IntRect coord(0, 0, 256, 256);
+		for (int i = 0; i < 4; ++i)
 		{
 			clip.frames.push_back({ textureId, coord });
 			coord.left += coord.width;
 		}
-		clip.frames.push_back({ textureId, sf::IntRect(0, 240, 120, 120) });
+		animation.AddClip(clip);
+	}
+
+	{
+		AnimationClip clip;
+		clip.id = "MoveUp";
+		clip.fps = 10;
+		clip.loopType = AnimationLoopTypes::Loop;
+
+		sf::IntRect coord(0, 256, 256, 256);
+		for (int i = 0; i < 4; ++i)
+		{
+			clip.frames.push_back({ textureId, coord });
+			coord.left += coord.width;
+		}
+		animation.AddClip(clip);
+	}
+
+	{
+		AnimationClip clip;
+		clip.id = "MoveDown";
+		clip.fps = 10;
+		clip.loopType = AnimationLoopTypes::Loop;
+
+		sf::IntRect coord(0, 512, 256, 256);
+		for (int i = 0; i < 4; ++i)
+		{
+			clip.frames.push_back({ textureId, coord });
+			coord.left += coord.width;
+		}
 		animation.AddClip(clip);
 	}
 
 	// Jump
-	{
-		AnimationClip clip;
-		clip.id = "Jump";
-		clip.fps = 10;
-		clip.loopType = AnimationLoopTypes::Single;
+	//{
+	//	AnimationClip clip;
+	//	clip.id = "Jump";
+	//	clip.fps = 10;
+	//	clip.loopType = AnimationLoopTypes::Single;
 
-		sf::IntRect coord(0, 360, 120, 120);
-		for (int i = 0; i < 7; ++i)
-		{
-			clip.frames.push_back({ textureId, coord });
-			coord.left += coord.width;
-		}
+	//	sf::IntRect coord(0, 360, 120, 120);
+	//	for (int i = 0; i < 7; ++i)
+	//	{
+	//		clip.frames.push_back({ textureId, coord });
+	//		coord.left += coord.width;
+	//	}
 
-		//clip.frames[6].action = []() {
-		//	std::cout << "On Complete Jump Clip" << std::endl;
-		//};
+	//	//clip.frames[6].action = []() {
+	//	//	std::cout << "On Complete Jump Clip" << std::endl;
+	//	//};
 
-		animation.AddClip(clip);
-	}
+	//	animation.AddClip(clip);
+	//}
 
-	animation.SetTarget(&sprite);
+	animation.SetTarget(&sprite);	//SpriteGo::Reset에서 spriteId로 찾은 리소스를 setTexture 해줌
 
 	SetOrigin(Origins::BC);
 }
 
 void Player::Reset()
 {
-	animation.Play("Idle");
+	animation.Play("IdleDown");
 	SetOrigin(origin);
 	SetPosition({ 0, 0 });
 	SetFlipX(false);
@@ -80,6 +138,7 @@ void Player::Update(float dt)
 {
 	animation.Update(dt);
 	float h = INPUT_MGR.GetAxis(Axis::Horizontal);
+	float v = INPUT_MGR.GetAxis(Axis::Vertical);
 
 	// 플립
 	if (h != 0.f)
@@ -92,16 +151,16 @@ void Player::Update(float dt)
 	}
 
 	// 점프
-	if (isGround && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+	/*if (isGround && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
 		velocity.y += JumpForce;
 		animation.Play("Jump");
 		isGround = false;
-	}
+	}*/
 
 	// 이동
 	velocity.x = h * speed;
-	velocity.y += gravity * dt;
+	velocity.y = v * speed;	// * gravity
 	position += velocity * dt;
 
 	// 바닥 충돌 처리
@@ -114,28 +173,52 @@ void Player::Update(float dt)
 
 	SetPosition(position);
 
+	std::string currentClipId = animation.GetCurrentClipId();	
 	// 에니메이션
-	if (animation.GetCurrentClipId() == "Idle")
+
+	
+
+	if (currentClipId.compare(0, 4, "Idle", 4) == 0)
 	{
-		if (isGround && h != 0.f)
+		if (h != 0.f)
 		{
-			animation.Play("Move");
+			animation.Play("MoveLR");
+		}
+		else if (v > 0.f)
+		{
+			animation.Play("MoveDown");
+		}
+		else if (v < 0.f)
+		{
+			animation.Play("MoveUp");
 		}
 	}
-	else if (animation.GetCurrentClipId() == "Move")
+	else if (currentClipId.compare(0, 4, "Move", 4) == 0)
 	{
-		if (isGround && h == 0.f)
+		char ch = currentClipId[currentClipId.find_first_not_of("Move")];
+		if (h == 0.f && v == 0.f)
 		{
-			animation.Play("Idle");
-		}
+			if (ch == 'L')
+			{
+				animation.Play("IdleLR");
+			}
+			else if (ch == 'D')
+			{
+				animation.Play("IdleDown");
+			}
+			else if (ch == 'U')
+			{
+				animation.Play("IdleUp");
+			}
+		}	
 	}
-	else if (animation.GetCurrentClipId() == "Jump")
+	/*else if (animation.GetCurrentClipId() == "Jump")
 	{
 		if (isGround)
 		{
 			animation.Play((h == 0.f) ? "Idle" : "Move");
 		}
-	}
+	}*/
 }
 
 bool Player::GetFlipX() const
@@ -148,6 +231,6 @@ void Player::SetFlipX(bool filp)
 	filpX = filp;
 
 	sf::Vector2f scale = sprite.getScale();
-	scale.x = !filpX ? abs(scale.x) : -abs(scale.x);
+	scale.x = !filpX ? -abs(scale.x) : abs(scale.x);
 	sprite.setScale(scale);
 }

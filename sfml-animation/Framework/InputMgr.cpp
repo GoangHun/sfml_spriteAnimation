@@ -35,13 +35,13 @@ void InputMgr::Update(float dt)
 	{
 		auto& axisInfo = it.second;
 		float raw = GetAxisRaw(axisInfo.axis);	// -1.0, 0, 1.0
-		if (raw == 0.f && axisInfo.value != 0.f)
+		if (raw == 0.f && axisInfo.value != 0.f)	//키를 땠을 때 value가 0이 될 때까지 방향 값을 유지함
 		{
 			raw = axisInfo.value > 0.f ? -1.f : 1.f;
 		}
 		float diff = axisInfo.sensi * dt;
 		axisInfo.value = Utils::Clamp(axisInfo.value + raw * diff, -1.0f, 1.0f);
-		if (abs(axisInfo.value) < diff * 0.5f)
+		if (abs(axisInfo.value) < diff * 0.5f)	//프레임당 증감율의 반값 아래가 되면 value를 0으로
 		{
 			axisInfo.value = 0.f;
 		}
@@ -139,8 +139,8 @@ float InputMgr::GetAxisRaw(Axis axis)
 
 	const AxisInfo& info = it->second;
 
-	auto rit = ingList.rbegin();
-	while (rit != ingList.rend())
+	auto rit = ingList.rbegin();	//역방향 목록에서 첫 번째 요소의 주소를 지정하는 const 반복기를 반환
+	while (rit != ingList.rend())	//역방향 목록에서 마지막 요소 다음에 나오는 위치의 주소를 지정하는 상수 반복기를 반환
 	{
 		int code = *rit;
 		if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
@@ -151,7 +151,7 @@ float InputMgr::GetAxisRaw(Axis axis)
 		{
 			return -1.f;
 		}
-		++rit;
+		++rit;	//역방향 목록에서 ++연산을 하기 때문에 '뒤 -> 앞' 으로 주소를 이동하게 된다.
 	}
 	return 0.0f;
 }

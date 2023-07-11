@@ -4,7 +4,6 @@
 
 void DataTableMgr::LoadAll()
 {
-	tables.insert({ DataTable::Ids::String, new StringTable() });
 
 	for (auto pair : tables)
 	{

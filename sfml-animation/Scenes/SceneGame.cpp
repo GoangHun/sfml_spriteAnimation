@@ -9,7 +9,7 @@
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
-	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/sprite_sheet.png"));
+	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/RubySheet.png"));
 }
 
 void SceneGame::Init()
@@ -17,8 +17,8 @@ void SceneGame::Init()
 	Release();
 
 	Player* player = (Player*)AddGo(new Player());
-	Ground* ground = (Ground*)AddGo(new Ground());
-	ground->SetPlayer(player);
+	//Ground* ground = (Ground*)AddGo(new Ground());
+	//ground->SetPlayer(player);
 
 	for (auto go : gameObjects)
 	{
