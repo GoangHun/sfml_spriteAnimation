@@ -21,4 +21,5 @@ struct AnimationClip
 	AnimationLoopTypes loopType;
 	int fps;
 
+	bool LoadFromFile(const std::string path);
 };

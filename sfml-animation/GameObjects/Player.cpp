@@ -2,103 +2,118 @@
 #include "Player.h"
 #include "InputMgr.h"
 #include "Framework.h"
+#include "ResourceMgr.h"
 
 
 void Player::Init()
 {
-	std::string textureId = "graphics/RubySheet.png";
+	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Fox_IdleLR.csv");
+	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Fox_IdleUp.csv");
+	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Fox_IdleDown.csv");
+
+	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Fox_MoveLR.csv");
+	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Fox_MoveUp.csv");
+	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Fox_MoveDown.csv");
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Fox_IdleLR.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Fox_IdleUp.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Fox_IdleDown.csv"));
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Fox_MoveLR.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Fox_MoveUp.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Fox_MoveDown.csv"));
 
 	// Idle
-	{
-		AnimationClip clip;
-		clip.id = "IdleLR";
-		clip.fps = 10;
-		clip.loopType = AnimationLoopTypes::Loop;
+	//{
+	//	AnimationClip clip;
+	//	clip.id = "IdleLR";
+	//	clip.fps = 10;
+	//	clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(0, 768, 256, 256);
-		for (int i = 0; i < 2; ++i)
-		{
-			clip.frames.push_back({ textureId, coord });
-			coord.top += coord.height;
-		}
-		animation.AddClip(clip);
-	}
+	//	sf::IntRect coord(0, 768, 256, 256);
+	//	for (int i = 0; i < 2; ++i)
+	//	{
+	//		clip.frames.push_back({ textureId, coord });
+	//		coord.top += coord.height;
+	//	}
+	//	animation.AddClip(clip);
+	//}
 
-	{
-		AnimationClip clip;
-		clip.id = "IdleDown";
-		clip.fps = 10;
-		clip.loopType = AnimationLoopTypes::Loop;
+	//{
+	//	AnimationClip clip;
+	//	clip.id = "IdleDown";
+	//	clip.fps = 10;
+	//	clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(256, 768, 256, 256);
-		for (int i = 0; i < 2; ++i)
-		{
-			clip.frames.push_back({ textureId, coord });
-			coord.top += coord.height;
-		}
-		animation.AddClip(clip);
-	}
+	//	sf::IntRect coord(256, 768, 256, 256);
+	//	for (int i = 0; i < 2; ++i)
+	//	{
+	//		clip.frames.push_back({ textureId, coord });
+	//		coord.top += coord.height;
+	//	}
+	//	animation.AddClip(clip);
+	//}
 
-	{
-		AnimationClip clip;
-		clip.id = "IdleUp";
-		clip.fps = 10;
-		clip.loopType = AnimationLoopTypes::Loop;
+	//{
+	//	AnimationClip clip;
+	//	clip.id = "IdleUp";
+	//	clip.fps = 10;
+	//	clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(512, 768, 256, 256);
-		for (int i = 0; i < 2; ++i)
-		{
-			clip.frames.push_back({ textureId, coord });
-			coord.top += coord.height;
-		}
-		animation.AddClip(clip);
-	}
+	//	sf::IntRect coord(512, 768, 256, 256);
+	//	for (int i = 0; i < 2; ++i)
+	//	{
+	//		clip.frames.push_back({ textureId, coord });
+	//		coord.top += coord.height;
+	//	}
+	//	animation.AddClip(clip);
+	//}
 
-	// Move
-	{
-		AnimationClip clip;
-		clip.id = "MoveLR";
-		clip.fps = 10;
-		clip.loopType = AnimationLoopTypes::Loop;
+	//// Move
+	//{
+	//	AnimationClip clip;
+	//	clip.id = "MoveLR";
+	//	clip.fps = 10;
+	//	clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(0, 0, 256, 256);
-		for (int i = 0; i < 4; ++i)
-		{
-			clip.frames.push_back({ textureId, coord });
-			coord.left += coord.width;
-		}
-		animation.AddClip(clip);
-	}
+	//	sf::IntRect coord(0, 0, 256, 256);
+	//	for (int i = 0; i < 4; ++i)
+	//	{
+	//		clip.frames.push_back({ textureId, coord });
+	//		coord.left += coord.width;
+	//	}
+	//	animation.AddClip(clip);
+	//}
 
-	{
-		AnimationClip clip;
-		clip.id = "MoveUp";
-		clip.fps = 10;
-		clip.loopType = AnimationLoopTypes::Loop;
+	//{
+	//	AnimationClip clip;
+	//	clip.id = "MoveUp";
+	//	clip.fps = 10;
+	//	clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(0, 256, 256, 256);
-		for (int i = 0; i < 4; ++i)
-		{
-			clip.frames.push_back({ textureId, coord });
-			coord.left += coord.width;
-		}
-		animation.AddClip(clip);
-	}
+	//	sf::IntRect coord(0, 256, 256, 256);
+	//	for (int i = 0; i < 4; ++i)
+	//	{
+	//		clip.frames.push_back({ textureId, coord });
+	//		coord.left += coord.width;
+	//	}
+	//	animation.AddClip(clip);
+	//}
 
-	{
-		AnimationClip clip;
-		clip.id = "MoveDown";
-		clip.fps = 10;
-		clip.loopType = AnimationLoopTypes::Loop;
+	//{
+	//	AnimationClip clip;
+	//	clip.id = "MoveDown";
+	//	clip.fps = 10;
+	//	clip.loopType = AnimationLoopTypes::Loop;
 
-		sf::IntRect coord(0, 512, 256, 256);
-		for (int i = 0; i < 4; ++i)
-		{
-			clip.frames.push_back({ textureId, coord });
-			coord.left += coord.width;
-		}
-		animation.AddClip(clip);
-	}
+	//	sf::IntRect coord(0, 512, 256, 256);
+	//	for (int i = 0; i < 4; ++i)
+	//	{
+	//		clip.frames.push_back({ textureId, coord });
+	//		coord.left += coord.width;
+	//	}
+	//	animation.AddClip(clip);
+	//}
 
 	// Jump
 	//{

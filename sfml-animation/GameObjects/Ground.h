@@ -1,12 +1,12 @@
 #pragma once
 #include "ShapeGo.h"
-#include "Player.h"
+#include "Player1.h"
 
 class Ground :
     public ShapeGo
 {
 protected:
-	Player* player = nullptr;
+	Player1* player = nullptr;
 
 public:
 	Ground(const std::string& n = "");
@@ -19,7 +19,7 @@ public:
 
 	virtual void Update(float dt) override;
 
-	void SetPlayer(Player* player) { this->player = player; }
+	void SetPlayer(Player1* player) { this->player = player; }
 	
 };
 
